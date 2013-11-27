@@ -66,6 +66,79 @@ struct additive_rollup_comp{
 	typedef typename remove_comp<C, Company<1, 1, 1> >::type type;
 };
 
+template<class C>
+class Group{
+	private:
+		int size, acc_val, hs_val, exo_val;
+	public:
+		Group();
+		Group(unsigned int k);
+		Group(const Group<C>& g);
+		unsigned int get_size() const{return size;}
+		void set_acc_val(unsigned int i);
+		void set_hs_val(unsigned int i);
+		void set_exo_val(unsigned int i);
+		unsigned int get_acc_val() const{return acc_val;}
+		unsigned int get_hs_val() const{return hs_val;}
+		unsigned int get_exo_val() const{return exo_val;}
+		unsigned int get_value() const{return size * (C::acc() * acc_val + C::hs() * hs_val + C::exo() * exo_val);}
+		typedef C company_type;
+		static company_type company;
+		C operator+(C comp);
+		C operator-(C comp);
+		C operator+=(C comp);
+		C operator-=(C comp);
+		C operator*(unsigned int i);
+		C operator/(unsigned int i);
+		C operator*=(unsigned int i);
+		C operator/=(unsigned int i);
+		/*
+		C operator==(C comp1, C comp2);
+		C operator!=(C comp1, C comp2);
+		C operator<(C comp1, C comp2);
+		C operator>(C comp1, C comp2);
+		C operator<=(C comp1, C comp2);
+		C operator>=(C comp1, C comp2);
+		* to chyba globalnie bo muszą być dwa różne typy żeby porównać
+		*/
+};
+
+template<class C>
+Group<C>::Group() : size(1), acc_val(15), hs_val(150), exo_val(50)
+{	
+}
+
+template<class C>
+Group<C>::Group(unsigned int k) : size(k), acc_val(15), hs_val(150), exo_val(50)
+{	
+}
+
+template<class C>
+Group<C>::Group(const Group<C>& g) : size(g.size), acc_val(g.acc_val),
+hs_val(g.hs_val), exo_val(g.exo_val)
+{	
+}
+
+template<class C>
+void Group<C>::set_acc_val(unsigned int i)
+{
+	acc_val = i;
+}
+
+template<class C>
+void Group<C>::set_hs_val(unsigned int i)
+{
+	hs_val = i;
+}
+
+template<class C>
+void Group<C>::set_exo_val(unsigned int i)
+{
+	exo_val = i;
+}
+
+
+
 #endif
 
 
