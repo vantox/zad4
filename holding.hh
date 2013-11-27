@@ -58,12 +58,24 @@ struct split_comp{
 
 template<class C>
 struct additive_expand_comp{
-typedef Company<add(C::acc(), 1), add(C::hs(), 1), add(C::exo(), 1)> type;	
+	typedef typename add_comp<C, Company<1, 1, 1> >::type type;
 };
 
 template<class C>
 struct additive_rollup_comp{
-typedef Company<remove(C::acc(), 1), remove(C::hs(), 1), remove(C::exo(), 1)> type;	
+	typedef typename remove_comp<C, Company<1, 1, 1> >::type type;
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
