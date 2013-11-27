@@ -84,23 +84,15 @@ class Group{
 		unsigned int get_value() const{return size * (C::acc() * acc_val + C::hs() * hs_val + C::exo() * exo_val);}
 		typedef C company_type;
 		static company_type company;
-		C operator+(C comp);
-		C operator-(C comp);
-		C operator+=(C comp);
-		C operator-=(C comp);
-		C operator*(unsigned int i);
-		C operator/(unsigned int i);
-		C operator*=(unsigned int i);
-		C operator/=(unsigned int i);
-		/*
-		C operator==(C comp1, C comp2);
-		C operator!=(C comp1, C comp2);
-		C operator<(C comp1, C comp2);
-		C operator>(C comp1, C comp2);
-		C operator<=(C comp1, C comp2);
-		C operator>=(C comp1, C comp2);
-		* to chyba globalnie bo muszą być dwa różne typy żeby porównać
-		*/
+		Group<C> operator+(Group<C> g);
+		Group<C> operator-(Group<C> g);
+		Group<C> operator+=(Group<C> g);
+		Group<C> operator-=(Group<C> g);
+		Group<C> operator*(unsigned int i);
+		Group<C> operator/(unsigned int i);
+		Group<C> operator*=(unsigned int i);
+		Group<C> operator/=(unsigned int i);
+		
 };
 
 template<class C>
@@ -135,6 +127,129 @@ template<class C>
 void Group<C>::set_exo_val(unsigned int i)
 {
 	exo_val = i;
+}
+
+template<class C>
+Group<C> Group<C>::operator+(Group<C> g)
+{	
+	Group<C> group(*this);
+	group.size += g.size;
+	group.acc_val = (size * acc_val + g.size * g.acc_val) / group.size;
+	group.hs_val = (size * hs_val + g.size * g.hs_val) / group.size;
+	group.exo_val = (size * exo_val + g.size * g.exo_val) / group.size;	
+	return group;
+}
+
+template<class C>
+Group<C> Group<C>::operator-(Group<C> g)
+{	
+	Group<C> group(*this);
+	if(group.size > g.size){
+		group.size = group.size - g.size;
+		group.acc_val = (size * acc_val - g.size * g.acc_val) / group.size;
+		group.hs_val = (size * hs_val - g.size * g.hs_val) / group.size;
+		group.exo_val = (size * exo_val - g.size * g.exo_val) / group.size;
+	}
+	else{	
+		group.size = 0;
+		group.acc_val = 0;
+		group.hs_val = 0;
+		group.exo_val = 0;
+	}		
+	return group;	
+}
+
+template<class C>
+Group<C> Group<C>::operator+=(Group<C> g)
+{	
+	int new_size = size + g.size;
+	acc_val = (size * acc_val + g.size * g.acc_val) / new_size;
+	hs_val = (size * hs_val + g.size * g.hs_val) / new_size;
+	exo_val = (size * exo_val + g.size * g.exo_val) / new_size;
+	size = new_size;
+	return *this;
+}
+
+template<class C>
+Group<C> Group<C>::operator-=(Group<C> g)
+{	
+	int new_size = (size - g.size) >= 0 ? (size - g.size) : 0;
+	if(new_size > 0){
+		acc_val = (size * acc_val - g.size * g.acc_val) / new_size;
+		hs_val = (size * hs_val - g.size * g.hs_val) / new_size;
+		exo_val = (size * exo_val - g.size * g.exo_val) / new_size;
+	}
+	else{
+		acc_val = 0;
+		hs_val = 0;
+		exo_val = 0;
+	}	
+	size = new_size;
+	return *this;
+}
+
+template<class C>
+Group<C> Group<C>::operator*(unsigned int i)
+{
+	Group<C> group(*this);
+	group.size *= i;
+	if (group.size == 0){
+		group.acc_val = 0;
+		group.hs_val = 0;
+		group.exo_val = 0;
+	}
+	else{
+		group.acc_val /= i;
+		group.hs_val /= i;
+		group.exo_val /= i;
+	}
+	return group;	
+}
+
+template<class C>
+Group<C> Group<C>::operator/(unsigned int i)
+{
+	Group<C> group(*this);
+	if(i == 0)
+		group.size = 0;
+	else
+		group.size /= i;
+	group.acc_val *= i;
+	group.hs_val *= i;
+	group.exo_val *= i;
+	
+	return group;	
+}
+
+template<class C>
+Group<C> Group<C>::operator*=(unsigned int i)
+{
+	size *= i;
+	if (size == 0){
+		acc_val = 0;
+		hs_val = 0;
+		exo_val = 0;
+	}
+	else{
+		acc_val /= i;
+		hs_val /= i;
+		exo_val /= i;
+	}
+	return *this;	
+}
+
+template<class C>
+Group<C> Group<C>::operator/=(unsigned int i)
+{
+	if(i == 0)
+		size = 0;
+	else
+		size /= i;
+	acc_val *= i;
+	hs_val *= i;
+	exo_val *= i;
+	
+	return *this;	
 }
 
 
