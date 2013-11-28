@@ -1,6 +1,6 @@
 #ifndef HOLDING_HH
 #define HOLDING_HH
-
+#include<iostream>
 constexpr int add(int a, int b)
 {
 	return a + b;
@@ -67,9 +67,14 @@ struct additive_rollup_comp{
 };
 
 template<class C>
+class Group;  
+template<class C>
+std::ostream& operator<< (std::ostream& o, const Group<C>& g);
+
+template<class C>
 class Group{
 	private:
-		int size, acc_val, hs_val, exo_val;
+		unsigned int size, acc_val, hs_val, exo_val;
 	public:
 		Group();
 		Group(unsigned int k);
@@ -92,6 +97,19 @@ class Group{
 		Group<C> operator/(unsigned int i);
 		Group<C> operator*=(unsigned int i);
 		Group<C> operator/=(unsigned int i);
+		template<class C2>
+		bool operator>(Group<C2> g);
+		template<class C2>
+		bool operator<(Group<C2> g);
+		template<class C2>
+		bool operator>=(Group<C2> g);
+		template<class C2>
+		bool operator<=(Group<C2> g);
+		template<class C2>
+		bool operator==(Group<C2> g);
+		template<class C2>
+		bool operator!=(Group<C2> g);
+		friend std::ostream& operator<< <>(std::ostream& o, const Group<C>& g);
 		
 };
 
@@ -252,7 +270,111 @@ Group<C> Group<C>::operator/=(unsigned int i)
 	return *this;	
 }
 
+template<class C> template<class C2>
+bool Group<C>::operator>(Group<C2> g)
+{
+	return ((C::hs() * size) > (C2::hs() * g.get_size()) &&
+	(C::exo() * size) > (C2::exo() * g.get_size()));
+}
 
+template<class C> template<class C2>
+bool Group<C>::operator<(Group<C2> g)
+{
+	return ((C::hs() * size) < (C2::hs() * g.get_size()) &&
+	(C::exo() * size) < (C2::exo() * g.get_size()));
+}
+
+template<class C> template<class C2>
+bool Group<C>::operator>=(Group<C2> g)
+{
+	return ((C::hs() * size) >= (C2::hs() * g.get_size()) &&
+	(C::exo() * size) >= (C2::exo() * g.get_size()));
+}
+
+template<class C> template<class C2>
+bool Group<C>::operator<=(Group<C2> g)
+{
+	return ((C::hs() * size) <= (C2::hs() * g.get_size()) &&
+	(C::exo() * size) <= (C2::exo() * g.get_size()));
+}
+
+template<class C> template<class C2>
+bool Group<C>::operator==(Group<C2> g)
+{
+	return ((C::hs() * size) == (C2::hs() * g.get_size()) &&
+	(C::exo() * size) == (C2::exo() * g.get_size()));
+}
+
+template<class C> template<class C2>
+bool Group<C>::operator!=(Group<C2> g)
+{
+	return ((C::hs() * size) != (C2::hs() * g.get_size()) ||
+	(C::exo() * size) != (C2::exo() * g.get_size()));
+}
+
+template<class C>
+std::ostream& operator<<(std::ostream& o, const Group<C>& g)	
+{
+	o << "Number of companies: " << g.size << "; Value: " << g.get_value() << std::endl;
+	o << "Accountancies value: " << g.acc_val <<", Hunting shops value: " << g.hs_val << ", Exchange offices value: " << g.exo_val << std::endl;
+	o << "Accountancies: " << C::acc() << ", Hunting shops: " << C::hs() << ", Exchange offices: " << C::exo() << std::endl;	
+	return o;
+}
+
+template<class C>
+Group<typename additive_expand_comp<C>::type> const
+additive_expand_group(Group<C> const &s1)
+{
+	Group<typename additive_expand_comp<C>::type> g(s1.get_size());
+	g.set_acc_val(s1.get_acc_val());
+	g.set_hs_val(s1.get_hs_val());
+	g.set_exo_val(s1.get_exo_val());	
+	return g;
+}
+
+template<class C>
+Group<typename additive_rollup_comp<C>::type> const
+additive_rollup_group(Group<C> const &s1)
+{
+	Group<typename additive_rollup_comp<C>::type> g(s1.get_size());
+	g.set_acc_val(s1.get_acc_val());
+	g.set_hs_val(s1.get_hs_val());
+	g.set_exo_val(s1.get_exo_val());	
+	return g;
+}
+
+template<class C>
+Group<typename multiply_comp<C, 10>::type> const
+multiplicative_expand_group(Group<C> const &s1)
+{
+	Group<typename multiply_comp<C, 10>::type> g(s1.get_size());
+	g.set_acc_val(s1.get_acc_val());
+	g.set_hs_val(s1.get_hs_val());
+	g.set_exo_val(s1.get_exo_val());	
+	return g;
+}
+
+template<class C>
+Group<typename split_comp<C, 10>::type> const
+multiplicative_rollup_group(Group<C> const &s1)
+{
+	Group<typename split_comp<C, 10>::type> g(s1.get_size());
+	g.set_acc_val(s1.get_acc_val());
+	g.set_hs_val(s1.get_hs_val());
+	g.set_exo_val(s1.get_exo_val());	
+	return g;
+}
+
+
+template<class C1, class C2, class C3>
+bool solve_auction(Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3)
+{	
+	bool solve = false;
+	if((g1 > g2) && (g1 > g3)) solve = true;
+	if((g2 > g1) && (g2 > g3)) solve = true;
+	if((g3 > g2) && (g3 > g1)) solve = true;
+	return solve;	
+}
 
 #endif
 
