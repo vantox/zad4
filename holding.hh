@@ -98,17 +98,17 @@ class Group{
 		Group<C> operator*=(unsigned int i);
 		Group<C> operator/=(unsigned int i);
 		template<class C2>
-		bool operator>(Group<C2> g);
+		bool operator>(Group<C2> g) const;
 		template<class C2>
-		bool operator<(Group<C2> g);
+		bool operator<(Group<C2> g) const;
 		template<class C2>
-		bool operator>=(Group<C2> g);
+		bool operator>=(Group<C2> g) const;
 		template<class C2>
-		bool operator<=(Group<C2> g);
+		bool operator<=(Group<C2> g) const;
 		template<class C2>
-		bool operator==(Group<C2> g);
+		bool operator==(Group<C2> g) const;
 		template<class C2>
-		bool operator!=(Group<C2> g);
+		bool operator!=(Group<C2> g) const;
 		friend std::ostream& operator<< <>(std::ostream& o, const Group<C>& g);
 		
 };
@@ -271,42 +271,42 @@ Group<C> Group<C>::operator/=(unsigned int i)
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator>(Group<C2> g)
+bool Group<C>::operator>(Group<C2> g) const
 {
 	return ((C::hs() * size) > (C2::hs() * g.get_size()) &&
 	(C::exo() * size) > (C2::exo() * g.get_size()));
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator<(Group<C2> g)
+bool Group<C>::operator<(Group<C2> g) const
 {
 	return ((C::hs() * size) < (C2::hs() * g.get_size()) &&
 	(C::exo() * size) < (C2::exo() * g.get_size()));
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator>=(Group<C2> g)
+bool Group<C>::operator>=(Group<C2> g) const
 {
 	return ((C::hs() * size) >= (C2::hs() * g.get_size()) &&
 	(C::exo() * size) >= (C2::exo() * g.get_size()));
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator<=(Group<C2> g)
+bool Group<C>::operator<=(Group<C2> g) const
 {
 	return ((C::hs() * size) <= (C2::hs() * g.get_size()) &&
 	(C::exo() * size) <= (C2::exo() * g.get_size()));
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator==(Group<C2> g)
+bool Group<C>::operator==(Group<C2> g) const
 {
 	return ((C::hs() * size) == (C2::hs() * g.get_size()) &&
 	(C::exo() * size) == (C2::exo() * g.get_size()));
 }
 
 template<class C> template<class C2>
-bool Group<C>::operator!=(Group<C2> g)
+bool Group<C>::operator!=(Group<C2> g) const
 {
 	return ((C::hs() * size) != (C2::hs() * g.get_size()) ||
 	(C::exo() * size) != (C2::exo() * g.get_size()));
@@ -368,12 +368,14 @@ multiplicative_rollup_group(Group<C> const &s1)
 
 template<class C1, class C2, class C3>
 bool solve_auction(Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3)
-{	
+{	/*
 	bool solve = false;
 	if((g1 > g2) && (g1 > g3)) solve = true;
 	if((g2 > g1) && (g2 > g3)) solve = true;
 	if((g3 > g2) && (g3 > g1)) solve = true;
 	return solve;	
+	*/
+	return g1 > g2;
 }
 
 #endif
