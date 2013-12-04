@@ -198,7 +198,7 @@ Group<C> Group<C>::operator-(Group<C> g)
 template<class C>
 Group<C> Group<C>::operator+=(Group<C> g)
 {	
-	int new_size = size + g.size;
+	unsigned int new_size = size + g.size;
 	if((new_size == 0) || (C::acc() == 0))
 		acc_val = 0;
 	else
@@ -218,7 +218,8 @@ Group<C> Group<C>::operator+=(Group<C> g)
 template<class C>
 Group<C> Group<C>::operator-=(Group<C> g)
 {	
-	int new_size = (size - g.size) >= 0 ? (size - g.size) : 0;
+	unsigned int new_size = (size > g.size) ? (size - g.size) : 0;
+	std::cout << new_size;
 	if(new_size > 0){
 		if(C::acc() == 0)
 			acc_val = 0;
@@ -232,13 +233,14 @@ Group<C> Group<C>::operator-=(Group<C> g)
 			exo_val = 0;
 		else
 			exo_val = (size * exo_val - g.size * g.exo_val) / new_size;
+		size = new_size;
 	}
 	else{
 		acc_val = 0;
 		hs_val = 0;
 		exo_val = 0;
-	}	
-	size = new_size;
+		size = 0;
+	}
 	return *this;
 }
 

@@ -2,6 +2,7 @@
 #include <typeinfo>
 #include <cassert>
 #include<cstdio>
+#include <climits>
 #include "holding.hh"
 
 using namespace std;
@@ -110,6 +111,34 @@ void group_operations_test()
 	Group<small > g;
 	Group<additive_expand_comp<small>::type > g2 = additive_expand_group(g);
 	cout << g << g2;
+}	
+
+void forum_test_1(){
+	typedef add_comp<Accountancy, Exchange_office>::type small_company;
+	typedef multiply_comp<small_company, 1000>::type big_company;
+	Group<big_company> s0(100);
+	s0.set_exo_val(UINT_MAX/100000);
+	s0.set_acc_val(0);
+	std::cout<<s0.get_value()<<std::endl;//jeszcze nie overflow
+	s0.set_acc_val(1);
+	std::cout<<s0.get_value()<<std::endl;//na students jest to overflow
+}
+
+void test_new_1()
+{
+	typedef add_comp<Accountancy, Company<2, 3, 4>::type>::type small_company;
+	typedef add_comp<multiply_comp<small_company, 10>::type, multiply_comp<Exchange_office, 20>::type>::type money;
+	typedef add_comp<multiply_comp<money, 30>::type, multiply_comp<small_company, 10>::type>::type guns;
+	
+	Group<small_company> s1(20);
+	Group<small_company> s2(40);
+	Group<guns> s3(20);
+	Group<money> s4(40);
+	
+	s1 -= s2;
+	s3 -= s3;
+	cout << s1 << s2 << s3 << s4;
+	
 	
 	
 }
@@ -118,7 +147,9 @@ int main()
 {	
 	//type_test();
 	//group_test();
-	peczar_test1();
+	//peczar_test1();
 	//group_operations_test();
+	//forum_test_1();
+	test_new_1();
 	return 0;
 }
