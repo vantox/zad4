@@ -152,9 +152,18 @@ Group<C> Group<C>::operator+(Group<C> g)
 {	
 	Group<C> group(*this);
 	group.size += g.size;
-	group.acc_val = (size * acc_val + g.size * g.acc_val) / group.size;
-	group.hs_val = (size * hs_val + g.size * g.hs_val) / group.size;
-	group.exo_val = (size * exo_val + g.size * g.exo_val) / group.size;	
+	if((group.size == 0 ) || (C::acc() == 0))
+		group.acc_val = 0;
+	else
+		group.acc_val = (size * acc_val + g.size * g.acc_val) / group.size;
+	if((group.size == 0 ) || (C::hs() == 0))
+		group.hs_val = 0;
+	else
+		group.hs_val = (size * hs_val + g.size * g.hs_val) / group.size;
+	if((group.size == 0 ) || (C::exo() == 0))
+		group.exo_val = 0;
+	else
+		group.exo_val = (size * exo_val + g.size * g.exo_val) / group.size;	
 	return group;
 }
 
@@ -164,9 +173,18 @@ Group<C> Group<C>::operator-(Group<C> g)
 	Group<C> group(*this);
 	if(group.size > g.size){
 		group.size = group.size - g.size;
-		group.acc_val = (size * acc_val - g.size * g.acc_val) / group.size;
-		group.hs_val = (size * hs_val - g.size * g.hs_val) / group.size;
-		group.exo_val = (size * exo_val - g.size * g.exo_val) / group.size;
+		if(C::acc() == 0)
+			group.acc_val = 0;
+		else
+			group.acc_val = (size * acc_val - g.size * g.acc_val) / group.size;
+		if(C::hs() == 0)
+			group.hs_val = 0;
+		else
+			group.hs_val = (size * hs_val - g.size * g.hs_val) / group.size;
+		if(C::exo() == 0)
+			group.exo_val = 0;
+		else
+			group.exo_val = (size * exo_val - g.size * g.exo_val) / group.size;
 	}
 	else{	
 		group.size = 0;
@@ -181,9 +199,18 @@ template<class C>
 Group<C> Group<C>::operator+=(Group<C> g)
 {	
 	int new_size = size + g.size;
-	acc_val = (size * acc_val + g.size * g.acc_val) / new_size;
-	hs_val = (size * hs_val + g.size * g.hs_val) / new_size;
-	exo_val = (size * exo_val + g.size * g.exo_val) / new_size;
+	if((new_size == 0) || (C::acc() == 0))
+		acc_val = 0;
+	else
+		acc_val = (size * acc_val + g.size * g.acc_val) / new_size;
+	if((new_size == 0) || (C::hs() == 0))
+		hs_val = 0;
+	else
+		hs_val = (size * hs_val + g.size * g.hs_val) / new_size;
+	if((new_size == 0) || (C::exo() == 0))
+		exo_val = 0;
+	else
+		exo_val = (size * exo_val + g.size * g.exo_val) / new_size;
 	size = new_size;
 	return *this;
 }
@@ -193,9 +220,18 @@ Group<C> Group<C>::operator-=(Group<C> g)
 {	
 	int new_size = (size - g.size) >= 0 ? (size - g.size) : 0;
 	if(new_size > 0){
-		acc_val = (size * acc_val - g.size * g.acc_val) / new_size;
-		hs_val = (size * hs_val - g.size * g.hs_val) / new_size;
-		exo_val = (size * exo_val - g.size * g.exo_val) / new_size;
+		if(C::acc() == 0)
+			acc_val = 0;
+		else
+			acc_val = (size * acc_val - g.size * g.acc_val) / new_size;
+		if(C::hs() == 0)
+			hs_val = 0;
+		else
+			hs_val = (size * hs_val - g.size * g.hs_val) / new_size;
+		if(C::exo() == 0)
+			exo_val = 0;
+		else
+			exo_val = (size * exo_val - g.size * g.exo_val) / new_size;
 	}
 	else{
 		acc_val = 0;
