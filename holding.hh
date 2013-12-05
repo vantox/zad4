@@ -97,6 +97,14 @@ class Group{
 		Group<C> operator/(unsigned int i);
 		Group<C> operator*=(unsigned int i);
 		Group<C> operator/=(unsigned int i);
+		
+		bool operator>(Group<C> g) const;
+		bool operator<(Group<C> g) const;
+		bool operator>=(Group<C> g) const;
+		bool operator<=(Group<C> g) const;
+		bool operator==(Group<C> g) const;
+		bool operator!=(Group<C> g) const;
+		
 		template<class C2>
 		bool operator>(Group<C2> g) const;
 		template<class C2>
@@ -308,6 +316,44 @@ Group<C> Group<C>::operator/=(unsigned int i)
 	return *this;	
 }
 
+
+template<class C>
+bool Group<C>::operator<(Group<C> g) const
+{
+	return size < g.get_size();
+}
+
+template<class C>
+bool Group<C>::operator>(Group<C> g) const
+{
+	return size > g.get_size();
+}
+
+template<class C>
+bool Group<C>::operator<=(Group<C> g) const
+{
+	return size <= g.get_size();
+}
+
+template<class C>
+bool Group<C>::operator>=(Group<C> g) const
+{
+	return size >= g.get_size();
+}
+
+template<class C>
+bool Group<C>::operator==(Group<C> g) const
+{
+	return size == g.get_size();
+}
+
+template<class C>
+bool Group<C>::operator!=(Group<C> g) const
+{
+	return size != g.get_size();
+}
+
+
 template<class C> template<class C2>
 bool Group<C>::operator>(Group<C2> g) const
 {
@@ -402,7 +448,6 @@ multiplicative_rollup_group(Group<C> const &s1)
 	g.set_exo_val(s1.get_exo_val());	
 	return g;
 }
-
 
 template<class C1, class C2, class C3>
 bool solve_auction(Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3)

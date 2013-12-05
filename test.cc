@@ -143,6 +143,33 @@ void test_new_1()
 	
 }
 
+void test_new_2()
+{
+	Group<Company<1, 0, 0> > a(20);
+Group<Company<1, 0, 0> > b(10);
+std::cout << (a < b) << std::endl;
+std::cout << (a <= b) << std::endl;
+std::cout << (a > b) << std::endl;
+ std::cout << (a >= b) << std::endl;
+
+std::cout << (a == b) << std::endl;
+}
+
+void forum_test_2()
+{
+	Group<Exchange_office> a;
+
+Group<Hunting_shop> b;
+
+assert((a < b) == false);
+
+assert((a > b) == false);
+
+assert((a == b) == false);
+
+assert((a != b) == true);
+}
+
 int main()
 {	
 	//type_test();
@@ -150,6 +177,8 @@ int main()
 	//peczar_test1();
 	//group_operations_test();
 	//forum_test_1();
-	test_new_1();
+	test_new_2();
+	//forum_test_2();
+	
 	return 0;
 }
